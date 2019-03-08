@@ -1,24 +1,39 @@
 import React, { Component } from "react";
-import { View, Text, Button } from "react-native";
+import { Button, Image, NativeModules } from "react-native";
+import Container from "../components/Container";
+import Title from "../components/Title";
 
-class HomeScreen extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
+export default class sHome extends Component {
+  state = {
+    on: false
+  };
+
+  toggle = () => {
+    NativeModules.VPN.connect();
+    this.setState({ on: !this.state.on });
+  };
 
   render() {
     const { navigation } = this.props;
+    const { on } = this.state;
+
     return (
-      <View>
-        <Text> Home Screen </Text>
+      <Container>
+        <Title>_ {NativeModules.VPN.appName} _ </Title>
+        <Image
+          style={{ width: 200, height: 200 }}
+          // source={require("../../assets/icns.vpn.png")}
+        />
         <Button
-          title="Go to user"
+          title="check user profile"
           onPress={() => navigation.navigate("User")}
         />
-      </View>
+        <Button
+          title={`VPN ${on === false ? "OFF" : "ON"}`}
+          color={on === false ? "red" : "green"}
+          onPress={this.toggle}
+        />
+      </Container>
     );
   }
 }
-
-export default HomeScreen;
